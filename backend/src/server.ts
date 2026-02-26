@@ -25,10 +25,10 @@ app.use("/api/task",taskRoutes)
 app.get("/health",(req:Request,res:Response)=>{
   res.status(200).json({message:"Server is running successfully"});
 })
-
 const PORT = env.port;
 
-app.listen(PORT,async ()=>{
-  connectDB();
-  console.log(`Server is running at http://localhost:${PORT}`);
-})
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+  });
+});

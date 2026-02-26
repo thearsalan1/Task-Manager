@@ -10,3 +10,11 @@ export const env = {
   frontendUrl: process.env.FRONTEND_URL as string,
   nodeEnv: process.env.NODE_ENV || 'development',
 };
+
+const requiredVars = ['MONGO_URI', 'JWT_SECRET', 'TASK_ENC_KEY', 'FRONTEND_URL'];
+for (const key of requiredVars) {
+  if (!process.env[key]) {
+    console.error(`❌ Missing required environment variable: ${key}`);
+    process.exit(1);
+  }
+}
