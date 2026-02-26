@@ -9,8 +9,8 @@ import taskRoutes from "./routes/task.routes"
 const app = express();
 
 app.use(cors({
-  origin:env.frontendUrl,
-  credentials:true,
+  origin: env.frontendUrl || 'http://localhost:3000',
+  credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
