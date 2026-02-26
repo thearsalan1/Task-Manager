@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import { connectDB } from './config/db';
 import authRoutes from "./routes/auth.routes"
+import taskRoutes from "./routes/task.routes"
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/auth",authRoutes);
+app.use("/api/task",taskRoutes)
 app.get("/health",(req:Request,res:Response)=>{
   res.status(200).json({message:"Server is running successfully"});
 })

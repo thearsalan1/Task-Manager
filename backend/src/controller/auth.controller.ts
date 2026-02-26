@@ -31,7 +31,7 @@ export const register = async (req:Request,res:Response,next:NextFunction)=>{
       return res.status(400).json({message:"Email already registered"});
     }
 
-    const hash = await bcrypt.hash(env.jwtSecret,10)
+    const hash = await bcrypt.hash(password,10)
 
     const user = await User.create({
       name,
@@ -50,35 +50,31 @@ export const register = async (req:Request,res:Response,next:NextFunction)=>{
   }
 }
 
-export const login = async(req:Request,res:Response,next:NextFunction)=>{
+export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {email,password}= req.body;
-
-    if(!email || !password){
-      return res.status(400).json({message:"All fields required"});
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    const user = await User.findOne({email});
-    if(!user){
-      return res.status(400).json({message:"User not found"});
-    }
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const isMatch = await bcrypt.compare(password,user.password);
-    if(!isMatch){
-      return res.status(400).json({message:"Invalid credentials"});
-    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const token = signToken({userId:user._id.toString()});
-    res.cookie('access_token',token,COOKIE_OPTIONS);
+    const token = signToken({ userId: user._id.toString() });
+
+    res.cookie('access_token', token, COOKIE_OPTIONS);
 
     return res.json({
-      message:'Login successful',
-      user:{ id: user._id, name: user.name, email: user.email }
-    })
-  } catch (error) {
-    next(error);
+      message: 'Login successful',
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (err) {
+    next(err);
   }
-}
+};
 
 
 export const logout = async (_req:Request,res:Response)=>{

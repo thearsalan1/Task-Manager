@@ -13,12 +13,10 @@ export interface ITask extends Document{
   description:string;
   status:TaskStatus;
   userId:mongoose.Types.ObjectId;
+  createdAt:Date
 }
 
 export interface JwtPayload{
   userId:string;
 }
 
-export interface AuthRequest extends Document{
-  user?:id:string;
-}
